@@ -1,0 +1,7 @@
+name: Msp3
+version: '${project.version}'
+main: me.neylz.msp3.Msp3
+api-version: 1.19
+prefix: MS Plugin
+authors: [ Neylz ]
+description: Mzened Survival Plugin.
