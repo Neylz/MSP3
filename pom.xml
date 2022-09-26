@@ -11,9 +11,9 @@
 
     <name>Msp3</name>
 
-    <description>Mzened Survival Plugin.</description>
+    <description>Mazened Survival Plugin.</description>
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>18</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
