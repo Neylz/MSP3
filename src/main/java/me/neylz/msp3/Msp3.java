@@ -6,15 +6,24 @@ import me.neylz.msp3.commands.AdminCamCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
 
 
 public final class Msp3 extends JavaPlugin {
 
+    public static Msp3 instance;
+
+    public static Msp3 getInstance() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
+        super.onEnable();
+        instance = this;
+
         //commands
-        getCommand("admincam").setExecutor(new AdminCamCommand());
+        Objects.requireNonNull(getCommand("admincam")).setExecutor(new AdminCamCommand());
         //getCommand("admincam").setTabCompleter();
 
 

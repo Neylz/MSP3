@@ -1,64 +1,87 @@
 package me.neylz.msp3.commands;
 
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
+import me.neylz.msp3.Msp3;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import static org.bukkit.Bukkit.getPlayer;
 
+
+
 public class AdminCamCommand implements CommandExecutor {
 
-    protected void toSpectate(Player player) {
-        Location pos = player.getLocation();
-        PersistentDataContainer persistentDataContainer = player.getPersistentDataContainer();
+    protected void toSpectate(Player player,Boolean admincamMode) {
+        //step 1 check if player already in admincam mode
+        //step 2 if 1 passed, execute tpBack
+        //step 3 teleport unless 1 passed and set admincam mode
 
-        /*
-        persistentDataContainer.set(new NamespacedKey("admincam", "posx"), PersistentDataType.DOUBLE, pos.getX());
-        persistentDataContainer.set(new NamespacedKey("admincam", "posy"), PersistentDataType.DOUBLE, pos.getY());
-        persistentDataContainer.set(new NamespacedKey("admincam", "posz"), PersistentDataType.DOUBLE, pos.getZ());
-        persistentDataContainer.set(new NamespacedKey("admincam", "world"), PersistentDataType.TAG_CONTAINER, pos.getWorld().getPersistentDataContainer());
-        persistentDataContainer.set(new NamespacedKey("admincam", "pitch"), PersistentDataType.FLOAT, pos.getPitch());
-        persistentDataContainer.set(new NamespacedKey("admincam", "yaw"), PersistentDataType.FLOAT, pos.getYaw());*/
 
-        player.setGameMode(GameMode.SPECTATOR);
+        if (admincamMode) { tpBack(player); } else {
+            Location pos = player.getLocation();
+
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".world", pos.getWorld().getName());
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".x", pos.getX());
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".y", pos.getY());
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".z", pos.getZ());
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".pitch", pos.getPitch());
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".yaw", pos.getYaw());
+            Msp3.getInstance().getConfig().set("admincamLocations." + player.getUniqueId() + ".gm", player.getGameMode().toString());
+
+
+            Msp3.getInstance().getConfig().set("admincamModeActivated" + player.getUniqueId(), true);
+
+
+            player.setGameMode(GameMode.SPECTATOR);
+
+            player.sendMessage(ChatColor.RED + "You are now in admincam mode");
+        }
     }
 
-    /*protected void tpBack(Player player) {
-        PersistentDataContainer persistentDataContainer = (PersistentDataContainer) player.getPersistentDataContainer().getKeys();
-        player.teleport(new Location(
-                persistentDataContainer.getOrDefault(new NamespacedKey("admincam", "world")),
-                persistentDataContainer.getOrDefault(new NamespacedKey("admincam", "posx")),
-                persistentDataContainer.getOrDefault(new NamespacedKey("admincam", "posy")),
-                persistentDataContainer.getOrDefault(new NamespacedKey("admincam", "posz")),
-                persistentDataContainer.getOrDefault(new NamespacedKey("admincam", "yaw")),
-                persistentDataContainer.getOrDefault(new NamespacedKey("admincam", "pitch"))
-        ));
-    }*/
+    protected void tpBack(Player player) {
+        World w = Bukkit.getServer().getWorld(Objects.requireNonNull(Msp3.getInstance().getConfig().getString("admincamLocations." + player.getUniqueId() + ".world")));
+        double x = Msp3.getInstance().getConfig().getDouble("admincamLocations."+ player.getUniqueId() +".x");
+        double y = Msp3.getInstance().getConfig().getDouble("admincamLocations."+ player.getUniqueId() +".y");
+        double z = Msp3.getInstance().getConfig().getDouble("admincamLocations."+ player.getUniqueId() +".z");
+        float pitch= (float) Msp3.getInstance().getConfig().getDouble("admincamLocations."+ player.getUniqueId() +".pitch");
+        float yaw = (float) Msp3.getInstance().getConfig().getDouble("admincamLocations."+ player.getUniqueId() +".yaw");
+
+        String gm = Msp3.getInstance().getConfig().getString("admincamLocations." + player.getUniqueId() + ".gm");
+
+        Msp3.getInstance().getConfig().set("admincamModeActivated" + player.getUniqueId(), false);
+
+        player.teleport(new Location(w, x, y, z, yaw, pitch));
+
+        switch (Objects.requireNonNull(gm)) {
+            case "SURVIVAL" -> player.setGameMode(GameMode.SURVIVAL);
+            case "ADVENTURE" -> player.setGameMode(GameMode.ADVENTURE);
+            case "CREATIVE" -> player.setGameMode(GameMode.CREATIVE);
+            case "SPECTATOR" -> player.setGameMode(GameMode.SPECTATOR);
+        }
+
+        player.sendMessage(ChatColor.GREEN + "Position and Gamemode restored");
+
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         //check if the command is executed by a player
-        if (!(sender instanceof Player)) { return true; }
+        if (!(sender instanceof Player player)) { return true; }
 
-        Player player = (Player) sender;
-        sender.sendMessage("Salut!");
 
+        boolean admincamMode = Msp3.getInstance().getConfig().getBoolean("admincamModeActivated" + player.getUniqueId());
 
 
         if (args.length == 0) {
             //if no args just change gamemode and save coordinates
-            this.toSpectate(player);
+            this.toSpectate(player, admincamMode);
 
-        } else if (args.length == 1) { // if there is an argument, teleport player to target
+        } else if (args.length == 1 && !admincamMode) { // if there is an argument, teleport player to target
             //check if the target is valid
             Player target = getPlayer(args[0]);
 
@@ -66,7 +89,7 @@ public class AdminCamCommand implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "The target is invalid");
 
             } else {
-                this.toSpectate(player);
+                this.toSpectate(player, false);
                 player.setSpectatorTarget(target);
             }
             return true;
@@ -74,6 +97,7 @@ public class AdminCamCommand implements CommandExecutor {
 
         } else {  // too many args
             player.sendMessage(ChatColor.RED + "There is too many arguments specified");
+            if (admincamMode) { player.sendMessage(ChatColor.RED + "You already are in admincam mode. To go back to your previous position, run §a/admincam§c without any argument."); }
             return true;
         }
 
