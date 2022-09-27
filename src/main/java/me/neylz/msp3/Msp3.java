@@ -3,6 +3,9 @@ package me.neylz.msp3;
 
 
 import me.neylz.msp3.commands.AdminCamCommand;
+import me.neylz.msp3.commands.FactionCommand;
+import me.neylz.msp3.commands.tabcompletion.AdminCamCompletion;
+import me.neylz.msp3.commands.tabcompletion.FactionTabCompletion;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,8 +27,9 @@ public final class Msp3 extends JavaPlugin {
 
         //commands
         Objects.requireNonNull(getCommand("admincam")).setExecutor(new AdminCamCommand());
-        //getCommand("admincam").setTabCompleter();
-
+        Objects.requireNonNull(this.getCommand("admincam")).setTabCompleter(new AdminCamCompletion());
+        Objects.requireNonNull(getCommand("faction")).setExecutor(new FactionCommand());
+        Objects.requireNonNull(this.getCommand("faction")).setTabCompleter(new FactionTabCompletion());
 
         getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Mazened Survival Plugin 3 Enabled");
     }

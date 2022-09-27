@@ -9,3 +9,8 @@ commands:
   admincam:
     description: spectate a player and go back to your original position
     usage: /<command> [player]
+  faction:
+    description: Choose & select your faction
+    usage: /<command>
+    aliases: [f,fac]
+    permission: msp3.faction
