@@ -1,7 +1,6 @@
 package me.neylz.msp3;
 
 
-
 import me.neylz.msp3.commands.AdminCamCommand;
 import me.neylz.msp3.commands.FactionCommand;
 import me.neylz.msp3.commands.tabcompletion.AdminCamCompletion;
@@ -9,7 +8,6 @@ import me.neylz.msp3.commands.tabcompletion.FactionTabCompletion;
 import me.neylz.msp3.events.InventoryEvents;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.KeybindComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
@@ -19,7 +17,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.awt.*;
 import java.util.Objects;
 
 import static org.bukkit.scoreboard.Team.Option.*;
@@ -34,11 +31,11 @@ public final class Msp3 extends JavaPlugin {
 
 
     //factions
-    public Team terreFaction;
-    public Team eauFaction;
-    public Team planteFaction;
-    public Team feuFaction;
-    public Team lumiereFaction;
+    public static Team terreFaction;
+    public static Team eauFaction;
+    public static Team planteFaction;
+    public static Team feuFaction;
+    public static Team lumiereFaction;
 
     public ScoreboardManager scoreboardManager;
     public Scoreboard scoreboard;
@@ -108,5 +105,16 @@ public final class Msp3 extends JavaPlugin {
         faction.setAllowFriendlyFire(true);
         faction.setCanSeeFriendlyInvisibles(false);
 
+    }
+
+    public static Team getFaction(String faction) {
+        return switch (faction) {
+            default -> null;
+            case "Terre" -> terreFaction;
+            case "Eau" -> eauFaction;
+            case "Plante" -> planteFaction;
+            case "Feu" -> feuFaction;
+            case "Lumiere" -> lumiereFaction;
+        };
     }
 }
