@@ -6,12 +6,14 @@ import me.neylz.msp3.commands.FactionCommand;
 import me.neylz.msp3.commands.tabcompletion.AdminCamCompletion;
 import me.neylz.msp3.commands.tabcompletion.FactionTabCompletion;
 import me.neylz.msp3.events.InventoryEvents;
+import me.neylz.msp3.events.LoginEvents;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -55,7 +57,7 @@ public final class Msp3 extends JavaPlugin {
 
         //events
         getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
-
+        getServer().getPluginManager().registerEvents(new LoginEvents(), this);
 
         //teams
         scoreboardManager = Bukkit.getScoreboardManager();
@@ -116,5 +118,15 @@ public final class Msp3 extends JavaPlugin {
             case "Feu" -> feuFaction;
             case "Lumiere" -> lumiereFaction;
         };
+    }
+    public static String playerInTeam(Player player) {
+        String team = null;
+        if (terreFaction.hasPlayer(player)) team = "Terre";
+        else if (eauFaction.hasPlayer(player)) team = "Eau";
+        else if (planteFaction.hasPlayer(player)) team = "Plante";
+        else if (feuFaction.hasPlayer(player)) team = "Feu";
+        else if (lumiereFaction.hasPlayer(player)) team = "Lumiere";
+
+        return team;
     }
 }

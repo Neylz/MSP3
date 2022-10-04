@@ -2,12 +2,18 @@ package me.neylz.msp3.events;
 
 import me.neylz.msp3.Msp3;
 import me.neylz.msp3.inventories.FactionSelection;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 
 public class InventoryEvents implements Listener {
 
@@ -53,8 +59,21 @@ public class InventoryEvents implements Listener {
                         } else player.sendMessage(ChatColor.RED + "Vous êtes déjà dans cette faction");
                         break;
                 }
+                e.getClickedInventory().close();
             }
         }
 
+    }
+
+    @EventHandler
+    public void onClose(InventoryCloseEvent e) {
+        Player player = Bukkit.getPlayer(e.getPlayer().getName());
+
+        if (Msp3.playerInTeam(player) == null) {
+            assert player != null;
+            player.kick(Component.text("\uE025\uE024\uE021\uE023\uE022").font(Key.key("msmp", "custom"))
+                    .append(Component.text("\n\n\nMerci de sélectionner une faction pour commencer à jouer.\n\n").font(Key.key("minecraft", "default")))
+                    .append(Component.text("Reconnectez-vous pour en choisir une\n").color(TextColor.color(255, 85, 85)).font(Key.key("minecraft", "default"))), PlayerKickEvent.Cause.PLUGIN);
+        }
     }
 }
