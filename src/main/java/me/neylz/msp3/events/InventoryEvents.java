@@ -14,10 +14,12 @@ public class InventoryEvents implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if (e.getClickedInventory() == null) { return; }
+        Player player = (Player) e.getWhoClicked();
 
-        if (e.getClickedInventory().getHolder() instanceof FactionSelection) {      // faction selection screen
+
+        //if (e.getClickedInventory().getHolder() instanceof FactionSelection) {      // faction selection screen
+        if (player.getOpenInventory().getTopInventory().getHolder() instanceof FactionSelection) {
             e.setCancelled(true);
-            Player player = (Player) e.getWhoClicked();
 
             if (e.getCurrentItem() == null) { return; }
 

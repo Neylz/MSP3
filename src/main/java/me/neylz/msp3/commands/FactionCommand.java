@@ -11,13 +11,10 @@ public class FactionCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player)) { return true; }
-
-        Player player = (Player) sender;
+        if (!(sender instanceof Player player)) { return true; }
 
         FactionSelection gui = new FactionSelection();
         player.openInventory(gui.getInventory());
-        
 
         return true;
     }
