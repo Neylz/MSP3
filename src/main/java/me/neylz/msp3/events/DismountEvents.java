@@ -15,9 +15,8 @@ public class DismountEvents implements Listener {
         Entity rider = e.getEntity();
 
         if (vehicle.hasMetadata("Msp3_sit")) {
-            vehicle.teleportAsync(vehicle.getLocation().add(0, 500, 0));
-            vehicle.setHealth(0);
-            rider.teleportAsync(rider.getLocation().add(0, 10, 0));
+            vehicle.remove();
+            rider.teleportAsync(rider.getLocation().add(0, .6, 0));
         }
     }
 }

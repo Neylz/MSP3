@@ -1,7 +1,6 @@
 package me.neylz.msp3.events;
 
 import me.neylz.msp3.Msp3;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -35,7 +34,6 @@ public class InteractEvents implements Listener {
                 && !player.isSneaking()
                 && player.getWorld().getBlockAt(block.getLocation().add(0, 1, 0)).getBlockData().getMaterial() == Material.AIR
             ) { // if block is stairs, straight, positioned bottom and the player isn't sneaking
-                player.sendMessage("wow" + Bukkit.getServer().getCurrentTick());
 
                 World world = player.getWorld();
                 Location blockLocation = e.getClickedBlock().getLocation();
