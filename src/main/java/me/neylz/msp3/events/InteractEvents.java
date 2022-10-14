@@ -1,5 +1,6 @@
 package me.neylz.msp3.events;
 
+import me.neylz.msp3.Msp3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.metadata.FixedMetadataValue;
 
 public class InteractEvents implements Listener {
 
@@ -26,7 +28,13 @@ public class InteractEvents implements Listener {
 
             Block block = e.getClickedBlock();
             assert block != null;
-            if (block.getBlockData() instanceof Stairs && ((Bisected) block.getBlockData()).getHalf() == Bisected.Half.BOTTOM && ((Stairs) block.getBlockData()).getShape() == Stairs.Shape.STRAIGHT && !player.isSneaking()) { // if block is stairs, straight, positioned bottom and the player isn't sneaking
+            if (
+                block.getBlockData() instanceof Stairs
+                && ((Bisected) block.getBlockData()).getHalf() == Bisected.Half.BOTTOM
+                && ((Stairs) block.getBlockData()).getShape() == Stairs.Shape.STRAIGHT
+                && !player.isSneaking()
+                && player.getWorld().getBlockAt(block.getLocation().add(0, 1, 0)).getBlockData().getMaterial() == Material.AIR
+            ) { // if block is stairs, straight, positioned bottom and the player isn't sneaking
                 player.sendMessage("wow" + Bukkit.getServer().getCurrentTick());
 
                 World world = player.getWorld();
@@ -45,6 +53,7 @@ public class InteractEvents implements Listener {
                 entity.setDisabledSlots(EquipmentSlot.LEGS);
                 entity.setDisabledSlots(EquipmentSlot.FEET);
                 entity.setMarker(true);
+                entity.setMetadata("Msp3_sit", new FixedMetadataValue(Msp3.getInstance(), Boolean.TRUE));
 
                 entity.teleport(entity.getLocation().add(0, -500, 0));  //tp back
                 entity.teleport(entity.getLocation().add(0, .3, 0));

@@ -5,6 +5,7 @@ import me.neylz.msp3.commands.AdminCamCommand;
 import me.neylz.msp3.commands.FactionCommand;
 import me.neylz.msp3.commands.tabcompletion.AdminCamCompletion;
 import me.neylz.msp3.commands.tabcompletion.FactionTabCompletion;
+import me.neylz.msp3.events.DismountEvents;
 import me.neylz.msp3.events.InteractEvents;
 import me.neylz.msp3.events.InventoryEvents;
 import me.neylz.msp3.events.LoginEvents;
@@ -60,6 +61,7 @@ public final class Msp3 extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
         getServer().getPluginManager().registerEvents(new LoginEvents(), this);
         getServer().getPluginManager().registerEvents(new InteractEvents(), this);
+        getServer().getPluginManager().registerEvents(new DismountEvents(), this);
 
 
         //teams
