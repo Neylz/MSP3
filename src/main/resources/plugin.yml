@@ -17,3 +17,8 @@ commands:
   maintenance:
     description: Prevent players connection
     usage: /<command>
+    aliases: [online,customwhitelist]
+  endentrance:
+    description: allow eyes pllacement in end protal frames
+    usage: /<command>
+    aliases: [openend]

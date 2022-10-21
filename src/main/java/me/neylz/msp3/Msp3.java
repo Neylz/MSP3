@@ -4,6 +4,7 @@ package me.neylz.msp3;
 import me.neylz.msp3.commands.AdminCamCommand;
 import me.neylz.msp3.commands.FactionCommand;
 import me.neylz.msp3.commands.MaintenanceCommand;
+import me.neylz.msp3.commands.OpenEndCommand;
 import me.neylz.msp3.commands.tabcompletion.AdminCamCompletion;
 import me.neylz.msp3.commands.tabcompletion.FactionTabCompletion;
 import me.neylz.msp3.data.ConfigInterface;
@@ -57,6 +58,7 @@ public final class Msp3 extends JavaPlugin {
         Objects.requireNonNull(getCommand("faction")).setExecutor(new FactionCommand());
         Objects.requireNonNull(this.getCommand("faction")).setTabCompleter(new FactionTabCompletion());
         Objects.requireNonNull(getCommand("maintenance")).setExecutor(new MaintenanceCommand());
+        Objects.requireNonNull(getCommand("endentrance")).setExecutor(new OpenEndCommand());
 
 
         //events

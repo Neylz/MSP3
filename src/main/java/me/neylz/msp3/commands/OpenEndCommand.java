@@ -11,17 +11,17 @@ import org.jetbrains.annotations.NotNull;
 import static org.bukkit.Bukkit.getServer;
 
 
-public class MaintenanceCommand implements CommandExecutor {
+public class OpenEndCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        ConfigInterface.setData("custom-whitelist", !ConfigInterface.getDataBoolean("custom-whitelist"));
+        ConfigInterface.setData("allow-end-opening", !ConfigInterface.getDataBoolean("allow-end-opening"));
 
-        if (ConfigInterface.getDataBoolean("custom-whitelist")) {
-            getServer().sendMessage(Component.text("Le serveur est désormais en mode maintenance. Aucune connection extérieure ne sera autorisée").color(TextColor.color(255, 83, 83)));
+        if (ConfigInterface.getDataBoolean("allow-end-opening")) {
+            getServer().sendMessage(Component.text("L'end est désormais ouvert!").color(TextColor.color(0, 255, 13)));
         } else {
-            getServer().sendMessage(Component.text("Le serveur autorise à nouveau les connexions extérieures.").color(TextColor.color(0, 255, 0)));
+            getServer().sendMessage(Component.text("L'end est désormais fermé.").color(TextColor.color(255, 85, 85)));
         }
 
         return true;
