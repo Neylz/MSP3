@@ -1,11 +1,12 @@
 package me.neylz.msp3.events;
 
+import com.destroystokyo.paper.ParticleBuilder;
 import me.neylz.msp3.Msp3;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import me.neylz.msp3.data.ConfigInterface;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Bisected;
+import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -15,6 +16,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.Objects;
 
 public class InteractEvents implements Listener {
 
@@ -82,4 +85,30 @@ public class InteractEvents implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onEndRightClick (PlayerInteractEvent e) {   //cancel opening portal
+        if (!ConfigInterface.getDataBoolean("allow-end-opening") && e.getAction() == Action.RIGHT_CLICK_BLOCK && Objects.requireNonNull(e.getClickedBlock()).getType() == Material.END_PORTAL_FRAME) {
+            if (((EndPortalFrame) e.getClickedBlock().getBlockData()).hasEye() || !e.getMaterial().equals(Material.ENDER_EYE)) return;  //return if no eyes in it
+
+
+            Location pos = e.getClickedBlock().getLocation().add(.5,1,.5);
+
+
+            ParticleBuilder particleBuilder = new ParticleBuilder(Particle.SMOKE_NORMAL);
+            particleBuilder.count(10);
+
+            particleBuilder.extra(0);
+            particleBuilder.offset(.1,.1,.1);
+            particleBuilder.location(pos);
+            particleBuilder.receivers(25);
+
+            particleBuilder.spawn();
+            e.getPlayer().playSound(e.getPlayer(), Sound.ENTITY_ENDER_EYE_DEATH, SoundCategory.MASTER, 100, 1);
+            e.setCancelled(true);
+        }
+
+
+    }
+
 }

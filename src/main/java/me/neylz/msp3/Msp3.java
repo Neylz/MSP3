@@ -6,6 +6,7 @@ import me.neylz.msp3.commands.FactionCommand;
 import me.neylz.msp3.commands.MaintenanceCommand;
 import me.neylz.msp3.commands.tabcompletion.AdminCamCompletion;
 import me.neylz.msp3.commands.tabcompletion.FactionTabCompletion;
+import me.neylz.msp3.data.ConfigInterface;
 import me.neylz.msp3.events.*;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -42,7 +43,7 @@ public final class Msp3 extends JavaPlugin {
     public ScoreboardManager scoreboardManager;
     public Scoreboard scoreboard;
 
-    public static boolean maintenance = false;
+
 
 
     @Override
@@ -66,6 +67,8 @@ public final class Msp3 extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DismountEvents(), this);
         getServer().getPluginManager().registerEvents(new ServerListPing(), this);
 
+
+        ConfigInterface.setupData();
 
         //teams
         scoreboardManager = Bukkit.getScoreboardManager();
@@ -136,12 +139,5 @@ public final class Msp3 extends JavaPlugin {
         else if (lumiereFaction.hasPlayer(player)) team = "Lumiere";
 
         return team;
-    }
-
-    public static boolean isMaintenance() {
-        return maintenance;
-    }
-    public static void setMaintenance(boolean maintenance) {
-        Msp3.maintenance = maintenance;
     }
 }
