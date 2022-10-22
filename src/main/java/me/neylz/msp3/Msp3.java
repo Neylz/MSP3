@@ -68,6 +68,7 @@ public final class Msp3 extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InteractEvents(), this);
         getServer().getPluginManager().registerEvents(new DismountEvents(), this);
         getServer().getPluginManager().registerEvents(new ServerListPing(), this);
+        getServer().getPluginManager().registerEvents(new ChatEvents(), this);
 
 
         ConfigInterface.setupData();
